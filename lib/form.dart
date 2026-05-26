@@ -41,7 +41,17 @@ class _FormularioState extends State<Formulario> {
                 'Registro user',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 30,)
+                const SizedBox(height: 30,),
+
+                TextFormField(
+                  controller: nombreController,
+
+                  decoration: InputDecoration(
+                    labelText: "Nombre user",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person)
+                  ),
+                )
             ],
           )
         ),
