@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Wiget1 extends StatelessWidget {
   const Wiget1({super.key});
@@ -28,6 +29,8 @@ class _FormularioState extends State<Formulario> {
   //Variables
   String rol = '...';
   DateTime? fecha;
+  bool terminosyC = false;
+  bool notificaciones = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,13 @@ class _FormularioState extends State<Formulario> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
+                //Debe retornar algo siempre
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Debe poner su nombre';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 20),
@@ -74,18 +84,34 @@ class _FormularioState extends State<Formulario> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.email),
                 ),
+                //Debe retornar algo siempre
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Debe poner su correo';
+                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Use un formato de correo valido';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 20),
               TextFormField(
                 controller: phoneController,
                 keyboardType: TextInputType.phone,
-
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
                   labelText: 'Telefono',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.phone),
                 ),
+                //Debe retornar algo siempre
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Debe poner su telefono';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 20),
@@ -98,6 +124,15 @@ class _FormularioState extends State<Formulario> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.lock),
                 ),
+                //Debe retornar algo siempre
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Debe poner su contra';
+                  } else if (value.length < 6) {
+                    return 'La contra debe tener al menos 6 caracteres';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 20),
@@ -153,6 +188,48 @@ class _FormularioState extends State<Formulario> {
                       });
                     }
                   },
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              CheckboxListTile(
+                title: const Text('TyC'),
+                value: terminosyC,
+                onChanged: (value) {
+                  setState(() {
+                    terminosyC = value!;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+
+              SwitchListTile(
+                title: const Text('Recibir notificaciones'),
+                value: notificaciones,
+
+                onChanged: (value) {
+                  setState(() {
+                    notificaciones = value;
+                  });
+                },
+              ),
+
+              const SizedBox(height:  20,),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate() && terminosyC) {
+                      //Logica registro
+                      print('Formulario valido.');
+                    } else {
+                      print('Debe aceptar TyC');
+                    }
+                  },
+                  child: const Text('Registrar'),
                 ),
               ),
             ],
