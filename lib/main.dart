@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:miapp/form.dart';
+import 'package:miapp/calculadora.dart';
 
 void main() {
-  runApp(const Wiget1());
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Calculadora(),
+    )
+  );
 }
