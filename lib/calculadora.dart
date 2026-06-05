@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Calculadora extends StatelessWidget {
+class Calculadora extends StatefulWidget {
   const Calculadora({super.key});
+
+  @override
+  State<Calculadora> createState() => _CalculadoraState();
+}
+
+class _CalculadoraState extends State<Calculadora> {
+  String operacion = '';
+  String resultado = '0';
+  String numeroActual = "";
+  List<String> elementos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +29,15 @@ class Calculadora extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
-                      '5 + 7',
+                    Text(
+                      operacion,
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
 
                     SizedBox(height: 10),
 
                     Text(
-                      '12',
+                      resultado,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 30,
@@ -38,17 +48,65 @@ class Calculadora extends StatelessWidget {
                 ),
               ),
             ),
-            Row(children: [boton("7"), boton("8"), boton("9"), boton("/"),],),
-            Row(children: [boton("4"), boton("5"), boton("6"), boton("X"),],)
+            Row(children: [boton("CA"), boton("CE"), boton("←"), boton("")]),
+            Row(children: [boton("7"), boton("8"), boton("9"), boton("/")]),
+            Row(children: [boton("4"), boton("5"), boton("6"), boton("X")]),
+            Row(children: [boton("1"), boton("2"), boton("3"), boton("-")]),
+            Row(children: [boton("0"), boton("."), boton("="), boton("+")]),
           ],
         ),
       ),
     );
   }
 
+  void actionButton(String valor) {
+    setState(() {
+
+      switch (valor) {
+        case "CA":
+          operacion = '';
+          resultado = '0';
+          break;
+        case "CE":
+          operacion = '';
+          break;
+        case "←":
+          if (operacion.isNotEmpty) {
+            operacion = operacion.substring(0, operacion.length - 2);
+          }
+          break;
+        case "+":
+        case "-":
+        case "X":
+        case "/":
+          if (numeroActual.isNotEmpty) {
+            elementos.add(numeroActual);
+            elementos.add(valor);
+            numeroActual = '';
+            operacion += valor;
+          }
+          print(elementos);
+          break;
+
+        default:
+          operacion += valor;
+          numeroActual += valor;
+          break;
+      }
+    });
+  }
+
   Widget boton(String texto) {
     return Expanded(
-      child: ElevatedButton(onPressed: () {}, child: Text("$texto")),
+      child: Container(
+        margin: const EdgeInsets.all(2.0),
+        child: ElevatedButton(
+          onPressed: () {
+            actionButton(texto);
+          },
+          child: Text(texto),
+        ),
+      ),
     );
   }
 }
